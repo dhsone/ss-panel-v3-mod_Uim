@@ -411,6 +411,7 @@ class AuthController extends BaseController
             }
         }
 
+        $user->sendDailyMail = 0;
 
         $user->class_expire = date("Y-m-d H:i:s", time() + Config::get('user_class_expire_default') * 3600);
         $user->class = Config::get('user_class_default');

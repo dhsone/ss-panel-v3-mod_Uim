@@ -298,7 +298,11 @@ class URL
         } 
 
         if (count($node_explode) >= 5) {
-            $item['type'] = $node_explode[4];
+            if ($item['net'] == 'kcp' || $node_explode[4] == 'http') {
+                $item['type'] = $node_explode[4];
+            } else {
+                $item['type'] = "none";
+            }
         } else {
             $item['type'] = "none";
         } 
@@ -348,7 +352,7 @@ class URL
 			$plugin_options='obfs=tls';
 		}
 		if($plugin_options!=''){
-			$array_all['plugin']='obfs-local';//目前只支持这个
+			$array_all['plugin']='simple-obfs';//目前只支持这个
 			if($user->obfs_param==''){
 				$array_all['plugin_options']=$plugin_options;
 			}

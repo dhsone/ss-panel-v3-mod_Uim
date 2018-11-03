@@ -284,7 +284,7 @@
 
 		.content-heading {
 			font-weight: 300;
-			color: #fff;
+			color: rgba(255, 255, 255,0);
 		}
 	</style>
 

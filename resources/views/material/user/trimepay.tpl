@@ -20,8 +20,8 @@
         </div>
     </div>
 
-<script src="https://cdnjs.loli.net/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+<script src="/assets/js/qrcode.min.js"></script>
 <script>
     var pid = 0;
 
@@ -60,13 +60,15 @@
                         if(type === 'ALIPAY_WAP' || type ==='ALIPAY_WEB'){
                             window.location.href = data.data;
                         } else {
+                            pid = data.pid;
                             $("#qrarea").html('<div class="text-center"><p>使用微信扫描二维码支付.</p><div align="center" id="qrcode" style="padding-top:10px;"></div><p>充值完毕后会自动跳转</p></div>');
                             var qrcode = new QRCode("qrcode", {
                                 render: "canvas",
-                                width: 100,
-                                height: 100,
+                                width: 200,
+                                height: 200,
                                 text: encodeURI(data.data)
                             });
+                            tid = setTimeout(f, 1000); //循环调用触发setTimeout
                         }
                     } else {
                         $("#result").modal();
@@ -76,6 +78,29 @@
                 }
             });
         });
+    }
+
+    function f(){
+        $.ajax({
+            type: "POST",
+            url: "/payment/status",
+            dataType: "json",
+            data: {
+                pid:pid
+            },
+            success: function (data) {
+                if (data.result) {
+                    console.log(data);
+                    $("#result").modal();
+                    $("#msg").html("充值成功！");
+                    window.setTimeout("location.href=window.location.href", {$config['jump_delay']});
+                }
+            },
+            error: function (jqXHR) {
+                console.log(jqXHR);
+            }
+        });
+        tid = setTimeout(f, 1000); //循环调用触发setTimeout
     }
 
 </script>

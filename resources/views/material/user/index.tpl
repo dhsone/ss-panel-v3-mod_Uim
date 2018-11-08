@@ -265,7 +265,7 @@
 														{/if}
 													</div>
 													<div class="tab-pane fade" id="all_ss_windows">
-													{$ssd_url_all =URL::getAllSSDUrl($user,true)}
+													{$ssd_url_all =URL::getAllSSDUrl($user)}
 														<p><span class="icon icon-lg text-white">filter_1</span><a href="/ssr-download/ssd-win.7z"> 点击下载 SSD</a>，解压至任意磁盘并运行</p>
 														<p><span class="icon icon-lg text-white">filter_2</span> 任务栏右下角右键纸飞机图标->服务器订阅->SSD服务器订阅设置，将订阅链接设置为下面的地址，确定之后再更新SSD服务器订阅</p>
 														<p><span class="icon icon-lg text-white">filter_3</span> 然后选择一个合适的服务器，代理规则选“绕过局域网和大陆”，然后即可上网</p>
@@ -280,6 +280,7 @@
 													<div class="tab-pane fade" id="all_ss_ios">
 														<p>推荐下载<a href="https://itunes.apple.com/cn/app/shadowrocket/id932747118?mt=8">Shadowrocket</a>，请在左侧菜单栏里提交工单申请已购买软件的美国商店Apple ID自行切换商店账号下载安装，为了您的隐私安全，请不要登录 iCloud 。下载完成后在 Safari 中点击<a href="{$ss_url_all}">这个（普通端口）</a>或者<a href="{$ss_url_all_mu}">这个（单端口多用户）</a>，然后点击确定，就可以批量添加节点</p>
 														<p>iOS 下载<a href="/link/{$ios_token}?is_ss=1">这个（普通端口）</a>或者<a href="/link/{$ios_token}?is_ss=1&is_mu=1">这个（单端口多用户）</a>，导入到 Surge 中，然后就可以随意切换服务器上网了</p>
+													    
 													</div>
 													<div class="tab-pane fade" id="all_ss_android">
 														<p><span class="icon icon-lg text-white">filter_1</span><a href="/ssr-download/ssd-android.apk"> 点击下载 SSD</a>。<b>因为与原版Shadowsocks包名相同，所以如果手机上如果已安装原版Shadowsocks，需先卸载</b></p>
@@ -483,23 +484,23 @@
 
 										<div class="progressbar">
 	                                         <div class="before"></div>
-	                                         <div class="bar tuse color3" style="width:calc({($user->u+$user->d-$user->last_day_t)/$user->transfer_enable*100}% - 44px);)"><span></span></div>
+	                                         <div class="bar tuse color3" style="width:calc({($user->u+$user->d-$user->last_day_t)/$user->transfer_enable*100}% - 44px);"><span></span></div>
 											 <div class="label-flex">
-												<div class="label la-top"><div class="bar ard color3"><span></span></div>今日已用 {$user->TodayusedTraffic()}</div>
+												<div class="label la-top"><div class="bar ard color3"><span></span></div>今日已用 <code>{$user->TodayusedTraffic()}</code></div>
 											 </div>
 										</div>
 										<div class="progressbar">
 										    <div class="before"></div>
-										    <div class="bar ard color2" style="width:calc({$user->last_day_t/$user->transfer_enable*100}% - 44px);)"><span></span></div>
+										    <div class="bar ard color2" style="width:calc({$user->last_day_t/$user->transfer_enable*100}% - 44px);"><span></span></div>
 										    <div class="label-flex">
-										       <div class="label la-top"><div class="bar ard color2"><span></span></div>过去已用 {$user->LastusedTraffic()}</div>
+										       <div class="label la-top"><div class="bar ard color2"><span></span></div>过去已用 <code>{$user->LastusedTraffic()}</code></div>
 										    </div>
 								        </div>
 										<div class="progressbar">
 											<div class="before"></div>
-											<div class="bar remain color" style="width:calc({($user->transfer_enable-($user->u+$user->d))/$user->transfer_enable*100}% - 44px);)"><span></span></div>
+											<div class="bar remain color" style="width:calc({($user->transfer_enable-($user->u+$user->d))/$user->transfer_enable*100}% - 44px);"><span></span></div>
 											<div class="label-flex">
-											   <div class="label la-top"><div class="bar ard color"><span></span></div>剩余流量 {$user->unusedTraffic()}</div>
+											   <div class="label la-top"><div class="bar ard color"><span></span></div>剩余流量 <code>{$user->unusedTraffic()}</code></div>
 											</div>
 									   </div>
 									   
@@ -604,7 +605,6 @@ function CountDown() {
     }
 }
 </script>
-
 
 <script>
 
@@ -761,3 +761,4 @@ initGeetest({
 
 
 </script>
+

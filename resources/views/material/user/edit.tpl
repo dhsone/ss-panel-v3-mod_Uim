@@ -75,7 +75,7 @@
 												<button class="btn btn-flat waves-attach" id="method-update"><span class="icon">check</span>&nbsp;</button>
 										</div>
 										<p>注意：SS/SSD/SSR 支持的加密方式有所不同，请根据实际情况来进行选择</p>
-										<p>当前加密方式：<code>{$user->method}</code></p>
+										<p>当前加密方式：<code id="ajax-user-method">{$user->method}</code></p>
 										<div class="form-group form-group-label">
 											<label class="floating-label" for="method">加密方式</label>
 											<select id="method" class="form-control maxwidth-edit">
@@ -360,7 +360,7 @@
 										<p>IP 段请使用 |127.0.0.0/8 类似格式表示</p>
 										<div class="form-group form-group-label">
 											<label class="floating-label" for="pac">规则书写区</label>
-											<textarea class="form-control maxwidth-edit" id="pac" rows="8">{$user->pac}</textarea>
+											<code contenteditable="true" class="form-control maxwidth-edit" id="pac">{$user->pac}</code>
 										</div>
 
 									</div>
@@ -374,24 +374,27 @@
 							<div class="card-main">
 								<div class="card-inner">
 									<div class="card-inner">
+									{if $user->telegram_id != 0}
 										<div class="cardbtn-edit">
 												<div class="card-heading">Telegram 绑定</div>
 												<div><a class="btn btn-flat btn-brand-accent waves-attach" href="/user/telegram_reset"><span class="icon">not_interested</span>&nbsp;</a></div>
-										</div>
+										</div>{/if}
+                                      {if $user->telegram_id == 0}
 										<p>Telegram 添加机器人账号 <a href="https://t.me/{$telegram_bot}">@{$telegram_bot}</a>，拍下下面这张二维码发给它。</p>
 										<div class="form-group form-group-label">
 											<div class="text-center">
 												<div id="telegram-qr"></div>
-												{if $user->telegram_id != 0}当前绑定：<a href="https://t.me/{$user->im_value}">@{$user->im_value}</a>{/if}
-											</div>
-										</div>
-
-									</div>
-								</div>
-							</div>
-						</div>
+												{elseif $user->telegram_id != 0}
+												当前绑定Telegram账户：<a href="https://t.me/{$user->im_value}">@{$user->im_value}</a>
+												{/if}
+									        </div>
+									    </div>
+								    </div>
+							    </div>
+						    </div>
+					    </div>
 						{/if}
-					</div>
+					
 
 
 
@@ -746,10 +749,10 @@ $(".copy-text").click(function () {
                     if (data.ret) {
                         $("#result").modal();
 						$("#ajax-user-passwd").html($("#sspwd").val());
-						$("#msg").html("成功了");
+						$("#msg").html("修改成功");
                     } else {
                         $("#result").modal();
-						$("#msg").html("失败了");
+						$("#msg").html("修改失败");
                     }
                 },
                 error: function (jqXHR) {
@@ -833,9 +836,10 @@ $(".copy-text").click(function () {
                     method: $("#method").val()
                 },
                 success: function (data) {
+					$("#ajax-user-method").html($("#method").val());
                     if (data.ret) {
                         $("#result").modal();
-						$("#msg").html("成功了");
+						$("#msg").html("修改成功");
                     } else {
                         $("#result").modal();
 						$("#msg").html(data.msg);

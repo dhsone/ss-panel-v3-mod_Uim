@@ -26,15 +26,14 @@
 								<p>商品不可叠加，新购商品会覆盖旧商品的效果。(7天循效果不能覆盖别乱买，流量不够请咨询客服)</p>
 								<p>购买新套餐时，如果未关闭旧套餐自动续费，则旧套餐的自动续费依然生效。</p>
 								<p>当前余额：<code>{$user->money}</code> 元</p>
-								
 							</div>
 						</div>
 					</div>
 
-					<div class="shop-switch">
+					<div class="ui-switch">
                          <div class="card">
 							 <div class="card-main">
-								 <div class="card-inner shop-switch">
+								 <div class="card-inner ui-switch">
 										<div class="switch-btn" id="switch-cards"><a href="#" onclick="return false"><i class="mdui-icon material-icons">apps</i></a></div>
 										<div class="switch-btn" id="switch-table"><a href="#" onclick="return false"><i class="mdui-icon material-icons">dehaze</i></a></div>
 								 </div>
@@ -42,12 +41,11 @@
 						 </div>
 					</div>
 						
-            <div class="shop-flex" {if $config["enable_shop_uiswitch"]=='1'}style="display: flex{else}style="display: none{/if}">
+            <div class="shop-flex">
 				{$shops->render()}
 				{foreach $shops as $shop}
                   <div class="card">
 					  <div class="card-main">
-						  <div class="card-inner">
 								<div class="shop-name">{$shop->name}</div>
 								<div class="shop-price"><code>{$shop->price}</code> 元</div>
 								<div class="shop-content">
@@ -71,7 +69,6 @@
 									{/if}
 							    </div>
 								<a class="btn btn-brand-accent shop-btn" href="javascript:void(0);" onClick="buy('{$shop->id}',{$shop->auto_renew})">购买</a>
-						  </div>
 					  </div>
 				  </div>
 				{/foreach}
@@ -81,7 +78,7 @@
 			</div>
 
 
-					<div class="table-responsive shop-display" {if $config["enable_shop_uiswitch"]=='1'}style="display: none{else}style="display: block{/if}">
+					<div class="table-responsive shop-table">
 						{$shops->render()}
 						<table class="table ">
                             <tr>
@@ -196,15 +193,60 @@ function buy(id,auto) {
 	$("#coupon_modal").modal();
 }
 
-$("#switch-cards").click(function (){
-	$(".shop-flex").css("display","flex");
-	$(".shop-display").css("display","none");
-});
+;(function(){
+    var nodeDefaultUI = localStorage.getItem("tempUIshop");
+	var elShopCard = $(".shop-flex");
+	var elShopTable = $(".shop-table");
+	nodeDefaultUI = JSON.parse(nodeDefaultUI);
+	if (!nodeDefaultUI) {
+		elShopCard.css("display","flex");
+	} else {
+		elShopCard.css("display",nodeDefaultUI["cardDisplay"]);
+	    elShopCard.removeClass("node-fade").addClass(nodeDefaultUI["cardFade"]);
+	    elShopTable.css("display",nodeDefaultUI["tableDisplay"]);
+	    elShopTable.removeClass("node-fade").addClass(nodeDefaultUI["tableFade"]);
+	}
+	
 
-$("#switch-table").click(function (){
-     $(".shop-flex").css("display","none");
-	 $(".shop-display").css("display","block");
-});
+	$("#switch-cards").click(function (){
+        elShopTable.addClass("node-fade");
+		setTimeout(function(){
+		      elShopCard.css("display","flex");
+              elShopTable.css("display","none");
+		},250);	
+		setTimeout(function(){
+		      elShopCard.removeClass("node-fade");
+		},270);
+		var defaultUI = {
+			"cardFade":"",
+			"cardDisplay":"flex",
+			"tableFade":"node-fade",
+			"tableDisplay":"none"
+		};
+		defaultUI = JSON.stringify(defaultUI);
+		localStorage.setItem("tempUIshop",defaultUI);
+    });
+
+    $("#switch-table").click(function (){
+         elShopCard.addClass("node-fade");
+		 setTimeout(function(){
+			elShopTable.css("display","block");
+            elShopCard.css("display","none");
+		},250);	
+		 setTimeout(function(){
+			  elShopTable.removeClass("node-fade");
+	    },270);
+		var defaultUI = {
+			"cardFade":"node-fade",
+			"cardDisplay":"none",
+			"tableFade":"",
+			"tableDisplay":"block"
+		};
+		defaultUI = JSON.stringify(defaultUI);
+		localStorage.setItem("tempUIshop",defaultUI);
+    });
+})();
+    
 
 $("#coupon_input").click(function () {
 		$.ajax({

@@ -5,6 +5,40 @@
 <script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
 
 <div class="tiphidden"></div>
+{function displayV2rayNode node=null}
+	{assign var=server_explode value=";"|explode:$node['server']}
+	<div class="tiptitle">
+		<a href="javascript:void(0);">{$node['name']}</a>
+	</div>
+
+	<p>地址：<span class="label label-brand-accent">
+												{$server_explode[0]}
+											</span></p>
+
+	<p>端口：<span class="label label-brand-red">
+												{$server_explode[1]}
+											</span></p>
+
+	<p>协议参数：<span class="label label-green">
+												{$server_explode[0]}
+											</span></p>
+
+	<p>用户 UUID：<span class="label label-brand">
+												{$user->getUuid()}
+											</span></p>
+
+	<p>流量比例：<span class="label label-red">
+												{$node['traffic_rate']}
+											</span></p>
+
+	<p>AlterId：<span class="label label-green">
+												{$server_explode[2]}
+											</span></p>
+
+	<p>VMess链接：
+		<a class="copy-text" data-clipboard-text="{URL::getV2Url($user, $node['raw_node'])}">点击复制</a>
+	</p>
+{/function}
 
 <main class="content">
 	<div class="content-header ui-content-header">
@@ -48,15 +82,15 @@
                                     <div class="nodename">{$node['name']}</div>
                                 </div>
                                 <div class="nodemiddle node-flex">
-                                    <div class="onlinemember node-flex"><i class="material-icons">flight_takeoff</i><span>{if $node['online_user'] == -1}N/A{else}{$node['online_user']}{/if}</span></div>
+                                    <div class="onlinemember node-flex"><i class="material-icons node-icon">flight_takeoff</i><span>{if $node['online_user'] == -1} N/A{else} {$node['online_user']}{/if}</span></div>
                                     <div class="nodetype">{$node['status']}</div>
                                 </div>
                                 <div class="nodeinfo node-flex">
-                                    <div class="nodetraffic node-flex"><i class="material-icons">equalizer</i><span>{if $node['traffic_limit']>0}{$node['traffic_used']}/{$node['traffic_limit']}{else}N/A{/if}</span></div>
+                                    <div class="nodetraffic node-flex"><i class="material-icons node-icon">equalizer</i><span>{if $node['traffic_limit']>0}{$node['traffic_used']}/{$node['traffic_limit']}GB{else}N/A{/if}</span></div>
                                     <div class="nodecheck node-flex">
-                                        <i class="material-icons">network_check</i><span>x{$node['traffic_rate']}</span>
+                                        <i class="material-icons node-icon">network_check</i><span>x{$node['traffic_rate']}</span>
                                     </div>
-                                    <div class="nodeband node-flex"><i class="material-icons">flash_on</i><span>{$node['bandwidth']}</span></div>
+                                    <div class="nodeband node-flex"><i class="material-icons node-icon">flash_on</i><span>{if {$node['bandwidth']}==0}N/A{else}{$node['bandwidth']}{/if}</span></div>
                                 </div>
                             </div>
                             <div class="nodestatus">
@@ -64,7 +98,7 @@
                                     <i class="material-icons">{if $node['online']=="1"}cloud_queue{elseif $node['online']=='0'}wifi_off{else}flash_off{/if}</i>
                                 </div>
 							</div>
-							
+
 						</div>
 						<div class="node-tip" tipindex="{$node@index}">
 								{if $node['class'] > $user->class}
@@ -81,7 +115,7 @@
 									{if $node['mu_only'] != 1}
 									    <div class="tiptitle">
 											<a href="javascript:void(0);" onClick="urlChange('{$node['id']}',0,{if $relay_rule != null}{$relay_rule->id}{else}0{/if})">{$node['name']}
-												{if $relay_rule != null} - {$relay_rule->dist_node()->name}{/if}</a> 
+												{if $relay_rule != null} - {$relay_rule->dist_node()->name}{/if}</a>
 												<div class="nodeload">
 													<div class="label label-brand-accent"> ↑点击节点查看配置信息</div>
 												<div>
@@ -122,44 +156,13 @@
 									<div class="tipmiddle">
 										<div><span class="node-icon"><i class="icon icon-lg">chat</i> </span>{$node['info']}</div>
 									</div>
-									
+
 
 									{if $node['sort'] == 11}
-									{assign var=server_explode value=";"|explode:$node['server']}
-									    <div class="tiptitle">
-											<a href="javascript:void(0);">{$node['name']}</a>
-										</div>
-
-										<p>地址：<span class="label label-brand-accent">
-												{$server_explode[0]}
-											</span></p>
-
-										<p>端口：<span class="label label-brand-red">
-												{$server_explode[1]}
-											</span></p>
-
-										<p>协议参数：<span class="label label-green">
-												{$server_explode[0]}
-											</span></p>
-
-										<p>用户 UUID：<span class="label label-brand">
-												{$user->getUuid()}
-											</span></p>
-
-										<p>流量比例：<span class="label label-red">
-												{$node['traffic_rate']}
-											</span></p>
-
-										<p>AlterId：<span class="label label-green">
-												{$server_explode[2]}
-											</span></p>
-
-										<p>VMess链接：
-											<a class="copy-text" data-clipboard-text="{URL::getV2Url($user, $node)}">点击复制</a>
-										</p>
+										{displayV2rayNode node=$node}
 									{/if}
 
-									
+
 								{/if}
 							</div>
 						{$point_node=null}
@@ -289,8 +292,7 @@
 																	<p class="card-heading">
 																		<a href="javascript:void(0);" onClick="urlChange('{$node['id']}',{$single_muport['server']->server},{if $relay_rule != null}{$relay_rule->id}{else}0{/if})">{$node['name']}
 																			{if $relay_rule != null} - {$relay_rule->dist_node()->name}{/if} - 单端口 Shadowsocks -
-																			{$single_muport['server']->server} 端口</a>
-																		<span class="label label-brand-accent">{$node['status']}</span>
+																			{$single_muport['server']->server} 端口</a><span class="label label-brand-accent">←点击节点查看配置信息</span>
 																	</p>
 																	
 																<!-- </div>
@@ -300,48 +302,10 @@
 													{/foreach}
 													{/if}
 													
-													<div><i class="icon icon-lg node-icon">chat</i>{$node['info']}</div>
+													<div><i class="icon icon-lg node-icon">chat</i> {$node['info']}</div>
 
 													{if $node['sort'] == 11}
-													{assign var=server_explode value=";"|explode:$node['server']}
-													<!-- <div class="card"> -->
-														<!-- <div class="card-main">
-															<div class="card-inner"> -->
-																<p class="card-heading">
-																	<a href="javascript:void(0);">{$node['name']}</a>
-																</p>
-
-																<p>地址：<span class="label label-brand-accent">
-																		{$server_explode[0]}
-																	</span></p>
-
-																<p>端口：<span class="label label-brand-red">
-																		{$server_explode[1]}
-																	</span></p>
-
-																<p>协议参数：<span class="label label-green">
-																		{$server_explode[0]}
-																	</span></p>
-
-																<p>用户 UUID：<span class="label label-brand">
-																		{$user->getUuid()}
-																	</span></p>
-
-																<p>流量比例：<span class="label label-red">
-																		{$node['traffic_rate']}
-																	</span></p>
-
-																<p>AlterId：<span class="label label-green">
-																		{$server_explode[2]}
-																	</span></p>
-
-																<p>VMess链接：
-																	<a class="copy-text" data-clipboard-text="{URL::getV2Url($user, $node)}">点击复制</a>
-																</p>
-
-															<!-- </div>
-														</div> -->
-													<!-- </div> -->
+														{displayV2rayNode node=$node}
 													{/if}
 												{/if}
 											    </div>
@@ -493,8 +457,12 @@
 		var windowWidth = $(window).width();
 		var cardSize = $(this).css("grid-column-end");
 		var tipID = $(this).attr("cardindex");
-        $(".node-tip[tipindex=" + tipID + "]").addClass("tip-down").css("z-index","3");
+		var tip = $(".node-tip[tipindex=" + tipID + "]");
 		tipHidden.css({"height":"100vh","width":"100vw"});
+		tip.css("z-index","3");
+		setTimeout(function() {
+           tip.addClass("tip-down");
+		},200);
     });
 
 	tipHidden.click(function(){

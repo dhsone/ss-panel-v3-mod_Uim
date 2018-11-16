@@ -9,6 +9,7 @@
 	<!-- css -->
 	<link href="/theme/material/css/base.min.css" rel="stylesheet">
 	<link href="/theme/material/css/project.min.css" rel="stylesheet">
+	<link href="/theme/material/css/auth.css" rel="stylesheet">
 	<link href="https://fonts.loli.net/css?family=Roboto:300,300italic,400,400italic,500,500italic" rel="stylesheet">
 	<link href="https://fonts.loli.net/css?family=Material+Icons" rel="stylesheet">
 
@@ -20,7 +21,7 @@
 .divcss5{ position:fixed; bottom:0;}
 </style>
 <body class="page-brand">
-	<header class="header header-transparent header-waterfall ui-header">
+	{* <header class="header header-transparent header-waterfall ui-header">
 		<ul class="nav nav-list pull-left">
 			<li>
 				<a data-toggle="menu" href="#ui_menu">
@@ -91,6 +92,6 @@
 				</ul>
 			</div>
 		</div>
-	</nav>
+	</nav> *}
 
 {if $config["enable_crisp"] == 'true'}{include file='crisp.tpl'}{/if}

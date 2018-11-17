@@ -361,6 +361,7 @@
 		.copy-text {
 			cursor: pointer;
 		}
+		
 
 	</style>
 
@@ -529,7 +530,7 @@
 					</a>
 					<ul class="dropdown-menu dropdown-menu-right">
 						<li>
-							<a class="padding-right-lg waves-attach" href="/user/"><span class="icon icon-lg margin-right">account_box</span>用户中心</a>
+							<a class="waves-attach" href="/user/"><span class="icon icon-lg margin-right">account_box</span>用户中心</a>
 						</li>
 
 						<li>
